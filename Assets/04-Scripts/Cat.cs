@@ -3,21 +3,35 @@ using UnityEngine.SceneManagement;
 
 public class Cat : MonoBehaviour
 {
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == "Door")
-        {
-            if (SceneManager.GetActiveScene().name == "Kitchen") SceneManager.LoadScene("Bedroom");
-            else SceneManager.LoadScene("Kitchen");
+    private Game _gameScript;
+    private bool teleport;
 
-            changePosition(SceneManager.GetActiveScene().name);
-        }
+    [SerializeField] private PlayerData data;
+
+    void Awake()
+    {
+        teleport = data.teleport;
     }
 
-    void changePosition(string name) // not working in kitchen
+    void OnEnable()
     {
-        GameObject cat = GameObject.Find("Player");
-        if (name == "Bedroom") cat.transform.position = new Vector3(-26.75f, 0, 19.74f);
-        else cat.transform.position = new Vector3(9.92f, 0, 19.97f);
+        _gameScript = GameObject.FindGameObjectWithTag("Room").GetComponent<Game>();
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Door" && teleport)
+        {
+            if (SceneManager.GetActiveScene().name == "Kitchen") SceneManager.LoadScene("Bedroom");
+            else
+            {
+                if(_gameScript.getFood())
+                {
+                    teleport = false;
+                    data.teleport = teleport;
+                }
+                SceneManager.LoadScene("Kitchen");
+            }
+        }
     }
 }
