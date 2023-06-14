@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e7e2b8294a24544d903d99ad33d9d4f, type: 3}
   m_Name: Data
   m_EditorClassIdentifier: 
-  _getFood: 1
-  teleport: 0
+  _getFood: 0
+  teleport: 1
